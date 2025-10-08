@@ -3,7 +3,14 @@ from .database_utils import get_connection
 class Author:
     def __init__(self, name, id=None):
         self._id = id
-        self.name = name
+        #validate name
+        if not isinstance(name, str):
+            raise Exception("Name must be a string")
+        if len(name) == 0:
+            raise Exception("Name must have length greater than 0")
+        
+        self._name = name
+        
         
     @property
     def id(self):
@@ -13,8 +20,7 @@ class Author:
         return self._name
     @name.setter
     def name(self, value):
-        #name can only be set once
-        if self._name is not None:
+        if hasattr(self, '_name_set') and self._name_set:
             raise Exception("Name cannot be changed after initialization")
         #name must be a string
         if not isinstance(value, str):
@@ -23,6 +29,7 @@ class Author:
         if len(value) == 0:
             raise Exception("Name must have length greater than 0")
         self._name = value
+        self._name_set = True
         
     @classmethod
     #create an Author object from a database row

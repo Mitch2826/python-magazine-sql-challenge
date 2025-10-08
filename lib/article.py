@@ -5,6 +5,8 @@ class Article:
         self._id = id
         self._title = None
         
+        self.title = title  # use the setter for validation
+        
         self._author = author
         self._magazine = magazine
         

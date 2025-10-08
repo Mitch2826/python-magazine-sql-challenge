@@ -135,6 +135,25 @@ class Magazine:
             return None
         
         return [Author.new_from_db(row) for row in rows]
+    @classmethod
+    def top_publisher(cls):
+        conn = get_connection()
+        cursor = conn.cursor()
+        cursor.execute('''
+            SELECT magazines.*, COUNT(articles.id) as article_count
+            FROM magazines
+            INNER JOIN articles ON magazines.id = articles.magazine_id
+            GROUP BY magazines.id
+            ORDER BY article_count DESC
+            LIMIT 1
+        ''')
+        row = cursor.fetchone()
+        conn.close()
+        
+        if not row:
+            return None
+        # we only need first 3 elements for new_from_db
+        return cls.new_from_db(row[:3])
     def __repr__(self):
         return f"<Magazine id={self._id} name='{self._name}' category='{self._category}'>"
     
