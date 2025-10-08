@@ -19,7 +19,7 @@ class Author:
         #name must be a string
         if not isinstance(value, str):
             raise Exception("Name must be a string")
-        #name must have lenght > 0
+        #ensure name is not empty
         if len(value) == 0:
             raise Exception("Name must have length greater than 0")
         self._name = value
@@ -30,7 +30,7 @@ class Author:
         return cls(name=row[1], id=row[0]) #row format is(id, name)
     
     @classmethod
-    #find an author by id in the db
+    #find an author by their id in the db
     def find_by_id(cls, id):
         conn = get_connection()
         cursor = conn.cursor()
